@@ -1,0 +1,31 @@
+# do not create a queue: section for your test environment
+test:
+  adapter: postgresql
+  encoding: utf8
+  database: canvas_test
+  host: localhost
+  username: canvas
+  password: hola
+  timeout: 5000
+  shard1: canvas_test_shard_1
+  shard2: canvas_test_shard_2
+
+development:
+  adapter: postgresql
+  encoding: utf8
+  database: canvas_development
+  password: hola
+  timeout: 5000
+  secondary:
+    replica: true
+    username: canvas_readonly_user
+
+production:
+  adapter: postgresql
+  port: 5432
+  encoding: utf8
+  database: canvas_production
+  host: 127.0.0.1
+  username: canvas
+  password: hola
+  timeout: 5000

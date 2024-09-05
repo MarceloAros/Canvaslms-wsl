@@ -1,0 +1,15 @@
+production: &default
+  # replace this with a random string of at least 20 characters
+  encryption_key: 3kj0iaywwklxpx4epqh1n7hyyt6fz0cvdh291by3a34dmon6co8rwr1df1p4u3r7c2eoli8zbi14030vqybvvyks0ekfxrr5p7mg
+
+  lti_iss: 'https://canvas.local'
+
+development:
+  <<: *default
+  encryption_key: facdd3a131ddd8988b14f6e4e01039c93cfa0160
+  previous_encryption_keys:
+    - 0610afc39c93010e4e6f41b8898ddd131a3ddcaf
+
+test:
+  <<: *default
+  encryption_key: facdd3a131ddd8988b14f6e4e01039c93cfa0160
