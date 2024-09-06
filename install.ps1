@@ -98,21 +98,3 @@ if ($isExistFolderDisk -eq $false) {
     Get-Content $hostsFilePath | Out-String
 
 }
-
-
-
-
-
-
-
-
-
-
-function FunctionName {
-    param (
-        [string]$customDistroName,
-        [string]$customDomain
-    )
-
-    
-}
