@@ -85,10 +85,6 @@ sudo apt update \
   && sudo a2ensite canvas.local-ssl.conf \
   && sudo service apache2 reload 
 
-
-
-&& sudo cp /etc/ssl/certs/canvas.local.crt /usr/local/share/ca-certificates/ \
-&& sudo update-ca-certificates \
 # admin@canvas.local
 # holaadios
 # Canvas
