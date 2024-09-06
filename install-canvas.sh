@@ -71,9 +71,24 @@ sudo apt update \
   && sudo a2enmod passenger \
   && sudo a2enmod ssl \
   && sudo cp -f /home/$user_name/configs/passenger/passenger.conf /etc/apache2/mods-available/passenger.conf \
-  && sudo service apache2 restart
+  && sudo service apache2 restart \
+  &&sudo apt install libapache2-mod-xsendfile -y \
+  && sudo a2enmod xsendfile \
+  && sudo cp -f /home/$user_name/configs/certs/canvas.local.key /etc/ssl/private/ \
+  && sudo cp -f /home/$user_name/configs/certs/canvas.local.crt /etc/ssl/certs/ \
+  && sudo cp /etc/ssl/certs/canvas.local.crt /usr/local/share/ca-certificates/ \
+  && sudo update-ca-certificates \
+  && sudo cp -f /home/$user_name/configs/apache/canvas.local.conf /etc/apache2/sites-available/ \
+  && sudo cp -f /home/$user_name/configs/apache/canvas.local-ssl.conf /etc/apache2/sites-available/ \
+  && sudo a2dissite 000-default.conf \
+  && sudo a2ensite canvas.local.conf \
+  && sudo a2ensite canvas.local-ssl.conf \
+  && sudo service apache2 reload 
 
 
+
+&& sudo cp /etc/ssl/certs/canvas.local.crt /usr/local/share/ca-certificates/ \
+&& sudo update-ca-certificates \
 # admin@canvas.local
 # holaadios
 # Canvas
