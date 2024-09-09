@@ -73,7 +73,7 @@ sudo apt update \
   && sudo a2enmod rewrite \
   && sudo a2enmod passenger \
   && sudo a2enmod ssl \
-  && sudo mkdir -p /var/run/passenger-instreg \
+  && sudo mkdir -p /var/run/passenger-instreg \ 
   && sudo chown -R www-data:www-data /var/run/passenger-instreg \
   && sudo cp -f /home/$user_name/configs/passenger/passenger.conf /etc/apache2/mods-available/passenger.conf \
   && sudo service apache2 restart \
@@ -100,6 +100,6 @@ sudo apt update \
   && sudo update-rc.d apache2 enable \
 
 # admin@canvas.local
-# holaadios
+# holahola
 # Canvas
 # 3

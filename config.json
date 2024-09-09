@@ -1,0 +1,22 @@
+{
+    "distribution": {
+        "custom_name": "canvas-ubuntu",
+        "user_name": "canvas",
+        "user_password": "hola",
+        "root_password": "hola",
+        "url_download_rootfs": "https://cloud-images.ubuntu.com/wsl/releases/jammy/current/ubuntu-jammy-wsl-amd64-wsl.rootfs.tar.gz",
+        "rootfs_file": ".\\utils\\ubuntu-jammy-wsl-amd64-wsl.rootfs.tar.gz", 
+        "disk_folder:": ".\\diskfolder"
+    },
+    "canvas_lms": {
+        "custom_domain": "canvas.local",
+        "dir_name": "canvas-lms",
+        "sys_dir": "/var/",
+        "admin_email": "admin@canvas.local",
+        "admin_password": "holahola",
+        "account_name": "Canvas"
+    },
+    "lti_tool": {
+        "custom_domain": "ltitool.local"
+    }
+}
