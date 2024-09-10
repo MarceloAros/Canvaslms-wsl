@@ -60,47 +60,47 @@ begin {
 process {
 
     if (-not (Test-Path $FILE_PATH)) {
-        Write-Host "El archivo hosts no se encontró o no se tiene permisos de acceso." -ForegroundColor Red
+        Write-Host "The hosts file was not found or you do not have access permissions." -ForegroundColor Red
         exit 1
     }
 
-    # Define la nueva línea que quieres agregar o modificar
+    # Define the new line you want to add or modify
     $newEntry = "$IP $DOMAIN"
 
-    # Lee el contenido del archivo como un array de líneas
+    # Reads the contents of the file as an array of lines
     $hostsContent = Get-Content -Path $FILE_PATH -Raw -Encoding UTF8 -ErrorAction Stop
-    $hostsContentLines = $hostsContent -split "`r`n" # Dividimos el contenido en líneas usando CRLF
+    $hostsContentLines = $hostsContent -split "`r`n" # Split the content into lines using CRLF
 
-    # Verifica si ya existe una entrada con el dominio dado
+    # Checks if an entry with the given domain already exists
     $lineExists = $false
     $updatedContent = @()
 
     foreach ($line in $hostsContentLines) {
         if ($line -match "$DOMAIN") {
-            # Si encuentra la línea, la reemplaza
+            # If it finds the line, it replaces it
             $updatedContent += $newEntry
             $lineExists = $true
         } else {
-            # Si no es la línea que buscas, mantenla intacta
+            # If it is not the wanted line, keep it intact
             $updatedContent += $line
         }
     }
 
     if (-not $lineExists) {
-        # Si no encontró ninguna entrada con el dominio, la añade al final
+        # If it did not find any entry with the domain, it adds to the end
         $updatedContent += $newEntry
     }
 
-    # Unimos las líneas en una sola cadena sin saltos de línea extra
+    # Joins the lines into a single string without extra line breaks
     $updatedContentString = $updatedContent -join "`r`n"
 
-    # Intentamos escribir el contenido actualizado en el archivo
+    # Attempt to write the updated content to the file
     try {
-        Start-Sleep -Seconds 2 # Pausa para evitar que el archivo esté en uso
+        Start-Sleep -Seconds 2 #Pause to prevent the file from being in use
         [System.IO.File]::WriteAllText($FILE_PATH, $updatedContentString, [System.Text.Encoding]::UTF8)
-        Write-Host "El archivo hosts ha sido actualizado exitosamente." -ForegroundColor Green
+        Write-Host "The hosts file has been updated successfully." -ForegroundColor Green
     } catch {
-        Write-Host "Error escribiendo el archivo: $_" -ForegroundColor Red
+        Write-Host "Error writing file: $_" -ForegroundColor Red
         exit 1
     }
 }

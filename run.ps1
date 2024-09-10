@@ -1,6 +1,30 @@
 # file name: Canvas create WSL Enviroment
 
+# Check if the script is running as administrator
+function Test-IsElevated {
+    $identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = New-Object System.Security.Principal.WindowsPrincipal($identity)
+    return $principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
+}
+
+# Get the path of the current script
+$scriptPath = $MyInvocation.MyCommand.Path
+$scriptDirectory = Split-Path -Path $scriptPath -Parent
+
+# Run the script with administrator privileges if it is not running as administrator
+if (-not (Test-IsElevated)) {
+    # Create an object to restart the script with elevated privilegess
+    $arguments = "& '$scriptPath' " + [string]::Join(' ', $args)
+    Start-Process powershell -ArgumentList $arguments -Verb runAs
+    exit
+}
+# The rest of the script will run with elevated permissions here
+Write-Host "Administrator privileges successfully granted." -ForegroundColor Green
+
+Set-Location $scriptDirectory
 $config = Get-Content -Raw -Path ".\config.json" | ConvertFrom-Json
+Start-Sleep -Seconds 5
+
 
 $windowsIpv4 = (Get-NetIPAddress -InterfaceAlias "*WSL*" -AddressFamily IPv4).IPAddress
 $wslIpv4 = (wsl -d $config.distribution.custom_name hostname -I)
