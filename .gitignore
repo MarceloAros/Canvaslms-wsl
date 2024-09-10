@@ -2,4 +2,4 @@ diskfolder/ext4.vhdx
 utils/ubuntu-jammy-wsl-amd64-wsl.rootfs.tar.gz
 test.sh
 test.ps1
-utils/distro-backup/*
+utils/distro-backup/*.tar
