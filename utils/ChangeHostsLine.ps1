@@ -64,29 +64,45 @@ process {
         exit 1
     }
 
-    $hostsContent = Get-Content $FILE_PATH
+    # Define la nueva línea que quieres agregar o modificar
+    $newEntry = "$IP $DOMAIN"
 
-    # Check if there is any line that contains the customDomain
-    $domainLineIndex = $hostsContent | Select-String -Pattern "\s+$DOMAIN" | ForEach-Object { $_.LineNumber - 1 }
+    # Lee el contenido del archivo como un array de líneas
+    $hostsContent = Get-Content -Path $FILE_PATH -Raw -Encoding UTF8 -ErrorAction Stop
+    $hostsContentLines = $hostsContent -split "`r`n" # Dividimos el contenido en líneas usando CRLF
 
-    if ($domainLineIndex -ne $null) {
-        # If a line exists with the domain, it replaces it with the correct IP
-        Write-Host "The domain $DOMAIN already exists, updating the IP..."
-        $hostsContent[$domainLineIndex] = "$IP $DOMAIN"
-    } else {
-        # If it does not exist, add a new line to the end of the file
-        Write-Host "The domain $DOMAIN does not exist, adding new entry..."
-        $hostsContent += "$IP $DOMAIN"
+    # Verifica si ya existe una entrada con el dominio dado
+    $lineExists = $false
+    $updatedContent = @()
+
+    foreach ($line in $hostsContentLines) {
+        if ($line -match "$DOMAIN") {
+            # Si encuentra la línea, la reemplaza
+            $updatedContent += $newEntry
+            $lineExists = $true
+        } else {
+            # Si no es la línea que buscas, mantenla intacta
+            $updatedContent += $line
+        }
     }
 
-    # Write the updated content to the hosts file 
-    Set-Content -Path $FILE_PATH -Value $hostsContent -Force
+    if (-not $lineExists) {
+        # Si no encontró ninguna entrada con el dominio, la añade al final
+        $updatedContent += $newEntry
+    }
 
-    Write-Host "Domain $DOMAIN added or updated in the hosts file." -ForegroundColor Green
+    # Unimos las líneas en una sola cadena sin saltos de línea extra
+    $updatedContentString = $updatedContent -join "`r`n"
 
-    # Confirmar el cambio
-    Write-Host "Current hosts file content:"
-    Get-Content $FILE_PATH | Out-String
+    # Intentamos escribir el contenido actualizado en el archivo
+    try {
+        Start-Sleep -Seconds 2 # Pausa para evitar que el archivo esté en uso
+        [System.IO.File]::WriteAllText($FILE_PATH, $updatedContentString, [System.Text.Encoding]::UTF8)
+        Write-Host "El archivo hosts ha sido actualizado exitosamente." -ForegroundColor Green
+    } catch {
+        Write-Host "Error escribiendo el archivo: $_" -ForegroundColor Red
+        exit 1
+    }
 }
 
 end {
