@@ -23,7 +23,19 @@ Write-Host "Administrator privileges successfully granted." -ForegroundColor Gre
 
 Set-Location $scriptDirectory
 
-$config = Get-Content -Raw -Path ".\config.json" | ConvertFrom-Json
+function Load-ConfigFile {
+    param (
+        [string]$ConfigPath
+    )
+    if (Test-Path $ConfigPath) {
+        return Get-Content -Path $ConfigPath | ConvertFrom-Json
+    } else {
+        Write-Host "Configuration file not found." -ForegroundColor Red
+        exit 1
+    }
+}
+
+$config = Load-ConfigFile -ConfigPath ".\config.json"
 
 $windowsIpv4 = (Get-NetIPAddress -InterfaceAlias "*WSL*" -AddressFamily IPv4).IPAddress
 $wslIpv4 = (wsl -d $config.distribution.custom_name hostname -I)
