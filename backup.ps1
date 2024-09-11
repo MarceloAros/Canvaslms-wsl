@@ -1,5 +1,5 @@
 # Function to load configuration from config.json
-function Load-ConfigFile {
+function Load-JsonConfigFile {
     param (
         [string]$ConfigPath
     )
@@ -68,13 +68,12 @@ function Import-Distribution {
 }
 
 # Path to the configuration file
-$configPath = ".\config.json"
-$config = Load-ConfigFile -ConfigPath $configPath
+$config = Load-JsonConfigFile -ConfigPath ".\config.json"
 $distroName = $config.distribution.custom_name
 
 # Menu options
 function Show-Menu {
-    Write-Host "Select an option:"
+    Write-Host "tSelect an option:"
     Write-Host "1. Export WSL distribution"
     Write-Host "2. Import WSL distribution"
     Write-Host "3. Exit"
@@ -82,7 +81,7 @@ function Show-Menu {
 
 while ($true) {
     Show-Menu
-    $choice = Read-Host "Enter the option number (default 3 to exit)"
+    $choice = Read-Host "Enter the option a option"
     
     switch ($choice) {
         1 {
@@ -93,10 +92,11 @@ while ($true) {
         }
         3 {
             Write-Host "Exiting..." -ForegroundColor Green
-            break
+            exit 1
         }
         default {
-            Write-Host "Invalid option. Exiting by default." -ForegroundColor Yellow
+            Write-Host "No selected..." -ForegroundColor Yellow
+            Clear-Host
             break
         }
     }
